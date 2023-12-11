@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/HarreshYohan/ims/issues"
   },
-  "homepage": "https://github.com/HarreshYohan/ims#readme"
+  "homepage": "https://github.com/HarreshYohan/ims#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
