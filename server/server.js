@@ -1,6 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const fs = require('fs');
+const path = require('path');
+require("dotenv")
 
 const app = express();
 
@@ -26,11 +29,20 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
-require("./app/routes/tutorial.routes")(app);
+const routerDir = path.join(__dirname, 'app', 'routes');
+// Read all files in the router directory
+const routerFiles = fs.readdirSync(routerDir);
+// Loop through each file and dynamically require it
+routerFiles.forEach((file) => {
+  if (file.endsWith('.js')) {
+    const router = require(path.join(routerDir, file));
+    router(app);
+  }
+});
 
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.APP_PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
