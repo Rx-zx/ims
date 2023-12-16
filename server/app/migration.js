@@ -22,8 +22,6 @@ async function runMigrations() {
     for (const file of migrationFiles) {
       const filePath = path.join(migrationPath, file);
       const migrationQuery = fs.readFileSync(filePath, 'utf-8');
-
-      console.log(`Executing migration: ${file}`);
       await client.query(migrationQuery);
     }
 

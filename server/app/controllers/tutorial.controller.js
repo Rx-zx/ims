@@ -5,7 +5,6 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
 
-    console.log(req)
     // Validate request
     if (!req.body.title) {
       res.status(400).send({
@@ -36,10 +35,8 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-    const title = req.query.title;
-    var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
   
-    Tutorial.findAll({ where: condition })
+    Tutorial.findAll()
       .then(data => {
         res.send({message: data});
       })
