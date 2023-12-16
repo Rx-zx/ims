@@ -1,50 +1,56 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 const fs = require('fs');
 const path = require('path');
-require("dotenv")
+const authenticateUser = require("./app/middleware/auth");
+require("dotenv").config(); 
 
 const app = express();
 
 const db = require("./app/models");
+const User = db.users;
+// Synchronize the database
 db.sequelize.sync()
   .then(() => {
-    console.log("Synced db.");
+    console.log("Database synchronized.");
   })
   .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
+    console.error("Failed to sync database:", err.message);
   });
 
+// Middleware
 app.use(cors());
-
-// parse requests of content-type - application/json
 app.use(express.json());
-
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 
-// simple route
+// Welcome route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to the bezkoder application." });
 });
 
+// Dynamically load routers from the 'app/routes' directory
 const routerDir = path.join(__dirname, 'app', 'routes');
-// Read all files in the router directory
 const routerFiles = fs.readdirSync(routerDir);
-// Loop through each file and dynamically require it
+
 routerFiles.forEach((file) => {
+
   if (file.endsWith('.js')) {
     const router = require(path.join(routerDir, file));
-    router(app);
+    const isLoginRouter = file.toLowerCase().includes('login');
+    
+    if(! isLoginRouter){
+      app.use(authenticateUser);
+    }
+    router(app);  
   }
 });
 
-
-// set port, listen for requests
 const PORT = process.env.APP_PORT || 8080;
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
-
