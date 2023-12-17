@@ -1,44 +1,5 @@
 const db = require("../models");
 const User = db.users;
-const Op = db.Sequelize.Op;
-const bcrypt = require('bcrypt');
-const helpers = require('../helpers/validations');
-
-// Number of rounds to generate the salt (the higher the number, the more secure but slower)
-const saltRounds = 5;
-
-// Create and Save a new User
-exports.create = async (req, res) => {
-  if (!helpers.isValidObject(req.body)) {
-    return res.status(200).send({ message: "Input is invalid. Some elements are null or empty." });
-  }
-
-  const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
-
-  try {
-    const existingUser = await User.findOne({
-      where: { email: req.body.email }
-    });
-
-    if (existingUser) {
-      return res.status(200).send({ message: "User with this email already exists. Try with another email." });
-    }
-
-    const user = {
-      username: req.body.username,
-      password: hashedPassword,
-      email: req.body.email,
-      user_type: req.body.user_type
-    };
-
-    const createdUser = await User.create(user);
-    res.status(200).send(createdUser);
-  } catch (err) {
-    res.status(500).send({
-      message: err.message || "Some error occurred while creating the User."
-    });
-  }
-};
 
 // Retrieve all Users from the database
 exports.findAll = (req, res) => {
