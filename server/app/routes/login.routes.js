@@ -3,7 +3,9 @@ module.exports = (app) => {
   
     var router = require("express").Router();
 
-    router.post("/", user.login);
+    router.post("/login", user.login);
 
-    app.use("/login",router);
+    router.post("/signup", user.signup);
+
+    app.use("/",router);
   };

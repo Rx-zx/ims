@@ -12,8 +12,7 @@ require("dotenv").config();
 const app = express();
 
 const db = require("./app/models");
-const User = db.users;
-// Synchronize the database
+
 db.sequelize.sync()
   .then(() => {
     console.log("Database synchronized.");
@@ -29,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Welcome route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the bezkoder application." });
+  res.json({ message: "Welcome to Institue Management System application." });
 });
 
 // Dynamically load routers from the 'app/routes' directory
