@@ -2,21 +2,18 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import {useAuth}  from '../../services/authContex';
 import { useNavigate } from 'react-router-dom';
+// import { NavigationBar } from './NavigationBar';
 
 export const Dashboard = () => {
 
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
-  const { isAuthenticated,logout } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   useEffect(() => {
-    console.log(isAuthenticated);
+
     if (!isAuthenticated) {
       navigate('/login');
     }
@@ -45,7 +42,7 @@ export const Dashboard = () => {
 
   return (
     <div>
-      <button onClick={handleLogout}>Logout</button>
+      {/* <NavigationBar /> */}
       <h2>Data Table</h2>
       <table>
         <thead>

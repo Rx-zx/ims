@@ -1,12 +1,43 @@
+:root {
+    --primary-text-color: #142d4c;
+    --login-background:  #c9d7da;
+    --bg-primary-color: #9fd3c7;
+    --bg-secondary-color: #385170;
+  }
+  
+body {
+margin: 0;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+height: 90%;
+background:linear-gradient(
+    to right,
+    var(  --bg-primary-color) 0%,
+    var( --bg-primary-color)30%,
+    var( --bg-secondary-color) 30%,
+    var( --bg-secondary-color) 100%
+);
+
+}
+  
+code {
+font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
 .container {
     display: flex;
     flex-direction: column;
     margin: auto;
     margin-top: 100px;
-    background-color: #c6c6a5;
-    margin-bottom: 170px;
+    background-color: var( --login-background);
+    margin-bottom: 40px;
     width: 600px;
-    border-radius: 50px;
+    border-radius: 5px;
+    margin-left: 200px;
 }
 
 .header{
@@ -19,7 +50,7 @@
 }
 
 .text{
-    color: #5a5a47;
+    color: var(  --primary-text-color);
     font-size: 48px;
     font-weight: 700;
 }
@@ -27,7 +58,7 @@
 .underline{
     width: 65px;
     height: 6px;
-    background-color: #5a5a47;
+    background-color: var(  --primary-text-color);
     border-radius: 10px;
 }
 
@@ -44,9 +75,9 @@
     margin: auto;
     width: 480px;
     height: 80px;
-    background-color: #cacab3;
+    background-color: var( --login-background);
     border-radius: 6px;
-    border: 3px solid  #89897a;
+    border: 1px solid var(  --primary-text-color);
 }
 
 .input img{
@@ -61,21 +92,21 @@
     background: transparent;
     border: none;
     outline: none;
-    color: rgb(0, 0, 0);
+    color: var(  --primary-text-color);
     font-size: 19px;
 }
 
 .forgot-password{
     padding-left: 65px;
     margin-top: 25px;
-    color: #5a5a47;
+    color: var(  --primary-text-color);
     
     font-size: 18px;
 }
 
 .forgot-password span{
     font-weight: bold;
-    color: #2e2e28;
+    color: var(  --primary-text-color);
     cursor: pointer;
 }
 
@@ -91,15 +122,10 @@
     align-items: center;
     width: 220px;
     height: 60px;
-    color: #ffffcc;
-    background-color:	#5a5a47;
-    font-size: 20px;
+    color: var( --login-background);
+    background-color:	var(  --primary-text-color);
+    font-size: 25px;
     font-weight: 700;
     cursor: pointer;
     border-radius: 50px;
-}
-
-.gray{
-    background-color: #ffffcc;
-    color: #5a5a47;
 }

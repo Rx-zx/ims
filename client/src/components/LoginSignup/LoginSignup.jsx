@@ -27,6 +27,7 @@ export const LoginSignup = () => {
       const authToken = data.token;
       localStorage.setItem('authToken', authToken);
       navigate('/dashboard');
+      
     } else {
       const error = await response.json();
       console.log('Login failed:', error);
@@ -43,7 +44,7 @@ export const LoginSignup = () => {
   return (
     <div className='container'>
       <div className="header">
-        <div className="text">Login</div>
+        <div className="text">LOGIN</div>
         <div className="underline"></div>
       </div>
       <div className="inputs">
