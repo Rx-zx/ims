@@ -4,8 +4,8 @@ const User = db.users;
 // Retrieve all Users from the database
 exports.findAll = (req, res) => {
   User.findAll()
-    .then(data => res.send({ data }))
-    .catch(err => res.status(500).send({ message: err.message || "Some error occurred while retrieving Users." }));
+    .then(data => res.status(200).send({ data }))
+    .catch(err => res.status(500).send({ message: err.message  }));
 };
 
 // Find a single User by id

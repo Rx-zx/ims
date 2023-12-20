@@ -7,8 +7,13 @@ require('dotenv')
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
+
+    if (!helpers.isValidObject(req.body)) {
+      return res.status(401).send({ message: "Input is invalid. Some elements are null or empty." });
+    }
+
     if (!(email && password)) {
-        res.status(400).send("Enter correct email & password");
+        res.status(401).send("Enter correct email & password");
         
     }
     const user = await User.findOne({
@@ -17,7 +22,7 @@ exports.login = async (req, res) => {
     if (user && ( await bcrypt.compare(password, user.password))) {
         // Create token
         const token = jwt.sign(
-          { user_id: user._id, email:user.email, user_type :user.user_type },
+          { user_id: user.id, email:user.email, user_type :user.user_type },
           process.env.SECRET_KEY,
           {
             expiresIn: "2m",
@@ -38,7 +43,7 @@ exports.login = async (req, res) => {
 exports.signup = async (req, res) => {
 
   if (!helpers.isValidObject(req.body)) {
-    return res.status(200).send({ message: "Input is invalid. Some elements are null or empty." });
+    return res.status(401).send({ message: "Input is invalid. Some elements are null or empty." });
   }
   const saltRounds = 5;
   const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
@@ -60,7 +65,18 @@ exports.signup = async (req, res) => {
     };
 
     const createdUser = await User.create(user);
-    res.status(200).send(createdUser);
+
+    if (createdUser) {
+      var token = jwt.sign(
+        { user_id: createdUser.id, email:createdUser.email, user_type :createdUser.user_type },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "2m",
+        }
+      );
+    }
+
+    res.status(200).json({ message: 'Succusfully signedup', token: token , user: createdUser});
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the User."
