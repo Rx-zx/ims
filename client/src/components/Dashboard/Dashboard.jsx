@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import {useAuth}  from '../../services/authContex';
 import { useNavigate } from 'react-router-dom';
+import {Header } from '../Header/Header'
+import './Dashboard.css';
+import {Navbar} from '../Navbar/Navbar';
 
 export const Dashboard = () => {
 
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
-  const { isAuthenticated,logout } = useAuth();
+  const localToken = localStorage.getItem("authToken");
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   useEffect(() => {
-    console.log(isAuthenticated);
-    if (!isAuthenticated) {
+    console.log(localToken);
+    if (!localToken) {
+      localStorage.removeItem('authToken');
       navigate('/login');
     }
     
@@ -34,6 +34,8 @@ export const Dashboard = () => {
         }
       } catch (error) {
         setData([]);
+        localStorage.removeItem('authToken');
+        navigate('/login');
         console.error('Error during data fetch:', error);
       }
 
@@ -45,24 +47,8 @@ export const Dashboard = () => {
 
   return (
     <div>
-      <button onClick={handleLogout}>Logout</button>
-      <h2>Data Table</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.username}</td>
-            </tr>
-          )) }
-        </tbody>
-      </table>
+      <Header type={'dashboard'} action = {"Logout"}/>
+      <Navbar />
     </div>
   );
 };

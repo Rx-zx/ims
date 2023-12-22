@@ -4,6 +4,7 @@ import './LoginSignup.css'
 import email_icon from '../../assets/login_email.png'
 import password_icon from '../../assets/login_password.png'
 import { useNavigate } from 'react-router-dom';
+import { Message } from '../Message/Message.jsx';
 
 
 export const LoginSignup = () => {
@@ -11,6 +12,10 @@ export const LoginSignup = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
+
+  const handleClose = () => {
+    setMessage(null);
+  };
 
 
   const handleLogin = async () => {
@@ -22,11 +27,12 @@ export const LoginSignup = () => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log('Token:', data.token);
+      console.log('Server Token:', data.token);
       setMessage({ type: 'success', text: 'Login successful!' });
       const authToken = data.token;
       localStorage.setItem('authToken', authToken);
       navigate('/dashboard');
+      
     } else {
       const error = await response.json();
       console.log('Login failed:', error);
@@ -43,13 +49,13 @@ export const LoginSignup = () => {
   return (
     <div className='container'>
       <div className="header">
-        <div className="text">Login</div>
+        <div className="text">LOGIN</div>
         <div className="underline"></div>
       </div>
       <div className="inputs">
         <div className="input">
           <img src={email_icon} alt="" />
-          <input type="email" placeholder='Email' onChange={(e) => setEmail(e.target.value)} required onKeyDown={handleKeyDown}/>
+          <input type="text" placeholder='Email' onChange={(e) => setEmail(e.target.value)} required onKeyDown={handleKeyDown}/>
         </div>
         <div className="input">
           <img src={password_icon} alt="" />
@@ -57,13 +63,11 @@ export const LoginSignup = () => {
         </div>
         <div className="forgot-password">Forgot Password <span>Click here!</span></div>
         <div className="submit-container">
-          <div className="submit" onClick={ handleLogin} >
-            Log In
-          </div>
+        <div className="submit" onClick={ handleLogin} >
+          Log In
         </div>
-        {message && (
-            <p style={{ color: message.type === 'success' ? 'green' : 'red' }}>{message.text}</p>
-          )}
+      </div>
+        {message &&  <Message type={message.type} text={message.text} onClose={handleClose} />}
       </div>
     </div>
   )
