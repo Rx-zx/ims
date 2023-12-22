@@ -49,6 +49,9 @@ export const Dashboard = () => {
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
       <Navbar />
+      <div className='main'>
+        <p>body comes here</p>
+      </div>
     </div>
   );
 };
