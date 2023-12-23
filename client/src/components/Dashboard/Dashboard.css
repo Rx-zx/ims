@@ -3,7 +3,7 @@
     position: fixed;
     top: 9.1%;
     left: 12.8%;
-    background-color:#385170; 
+    background-color:var( --login-background) ;
     width: 90%;
     height: 100%;
   }

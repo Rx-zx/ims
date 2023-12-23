@@ -23,10 +23,6 @@ background:linear-gradient(
 
 }
   
-code {
-font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
 
 .container {
     display: flex;
@@ -38,7 +34,8 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     width: 600px;
     border-radius: 5px;
     margin-left: 200px;
-}
+    backdrop-filter: blur(1000px); 
+} 
 
 .header{
     display: flex;
