@@ -4,13 +4,14 @@ import HomePage from './components/HomePage';
 import { LoginSignup } from "./components/LoginSignup/LoginSignup";
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Welcome } from './components/Welcome/Welcome';
+import './App.css'
 
 
 function App() {
 return (
   <Router>
     <Routes>
-    <Route path="/welcome" element={<Welcome />} />
+    <Route path="/" element={<Welcome />} />
     <Route path="/login" element={<LoginSignup />} />
     <Route path="/dashboard" element={<Dashboard />} />
     </Routes>

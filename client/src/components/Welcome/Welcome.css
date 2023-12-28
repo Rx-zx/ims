@@ -1,0 +1,49 @@
+.home {
+    width: 100%;
+    margin: 0; 
+    padding: 0; 
+  }
+.image-section {
+    width: 100%;
+    background-color: #f0f0f0;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .link-section {
+    padding: 10px;
+    height: 3%;
+    width: 100%;
+    position: fixed;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+  
+  li  .header-name{
+    text-decoration: underline overline #FF3028;
+    color: #313131;
+    float: left;
+    font-size: 40x;
+    letter-spacing: .8rem;
+    font-family: baskerville ,serif;
+    font-size: 80px;
+  }
+
+  li button{
+    float: right;
+    margin-right: 3%;
+    width: 100px;
+    height: 50px;
+    margin-bottom: 3%;
+    width: 200px; 
+    padding: 8px; 
+    color: #313131;
+
+  }
