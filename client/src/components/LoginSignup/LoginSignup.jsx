@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import './LoginSignup.css'
 import email_icon from '../../assets/login_email.png'
 import password_icon from '../../assets/login_password.png'
+import home from '../../assets/home.png'
 import { useNavigate } from 'react-router-dom';
 import { Message } from '../Message/Message.jsx';
 
@@ -47,7 +48,10 @@ export const LoginSignup = () => {
   };
 
   return (
+    <div className='page login-page'>
+      <a className="home-button"  href="/"><img src={home} className="home-button-img"  alt="" /></a>
     <div className='container'>
+    
       <div className="header">
         <div className="text">LOGIN</div>
         <div className="underline"></div>
@@ -69,6 +73,7 @@ export const LoginSignup = () => {
       </div>
         {message &&  <Message type={message.type} text={message.text} onClose={handleClose} />}
       </div>
+    </div>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import HomePage from './components/HomePage';
 import { LoginSignup } from "./components/LoginSignup/LoginSignup";
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Welcome } from './components/Welcome/Welcome';
+import './App.css'
 
 
 function App() {

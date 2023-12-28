@@ -14,7 +14,7 @@ export const Header = ({type ,action}) => {
     navigate('/login');
   };
 
-  const link = type === "welcome" ? "/welcome" : "/dashboard";
+  const link = type === "welcome" ? "/" : "/dashboard";
 
   return (
     <header className="fixed-header">
