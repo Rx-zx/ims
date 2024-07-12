@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const verifyToken = (req, res, next) => {
 
+
   if (!req.headers.authorization ) {
     return res.status(403).send("A token is required for authentication");
   }

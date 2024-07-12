@@ -4,6 +4,11 @@ import HomePage from './components/HomePage';
 import { LoginSignup } from "./components/LoginSignup/LoginSignup";
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Welcome } from './components/Welcome/Welcome';
+import { TimeTable } from "./components/TimeTable/TimeTable";
+import { Student } from "./components/Student/Student";
+import { Staff } from "./components/Staff/Staff";
+import { Report } from "./components/Report/Report";
+import { News } from "./components/News/News";
 import './App.css'
 
 
@@ -14,6 +19,11 @@ return (
     <Route path="/" element={<Welcome />} />
     <Route path="/login" element={<LoginSignup />} />
     <Route path="/dashboard" element={<Dashboard />} />
+    <Route path="/timetable" element={<TimeTable />} />
+    <Route path="/staff" element={<Staff />} />
+    <Route path="/student" element={<Student />} />
+    <Route path="/news" element={<News />} />
+    <Route path="/report" element={<Report />} />
     </Routes>
   </Router>
 );

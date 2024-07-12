@@ -2,7 +2,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: url('../src/assets/header.jpeg');
+    background: url('../src/assets/header_bw.jpg');
+    /* background-image: linear-gradient(to left, rgb(49, 49, 49)  10%, rgb(232, 232, 232) 90%); */
     align-items: center;
     justify-content: center;
   }

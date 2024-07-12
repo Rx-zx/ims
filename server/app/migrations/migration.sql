@@ -19,11 +19,11 @@
 -- );
 
 -- --TRUNCATE BEFORE INSERTING-----
--- TRUNCATE users;
+TRUNCATE users;
 -- -- INSERT data into the users table
 -- CREATE EXTENSION IF NOT EXISTS pgcrypto;
--- INSERT INTO users (username, email, password, user_type) VALUES
--- ('test_1', 'test_1@gmail.com', crypt('test_1', gen_salt('bf', 10)), 'ADMIN'), 
--- ('test_2', 'test_2@gmail.com', crypt('test_2', gen_salt('bf', 10)), 'TUTOR'),
--- ('test_3', 'test_3@gmail.com', crypt('test_3', gen_salt('bf', 10)), 'STAFF'),
--- ('test_4', 'test_4@gmail.com', crypt('test_4', gen_salt('bf', 10)), 'NA') ;
+INSERT INTO users (username, email, password, user_type) VALUES
+('test_1', 'test_1@gmail.com', crypt('test_1', gen_salt('bf', 10)), 'ADMIN'), 
+('test_2', 'test_2@gmail.com', crypt('test_2', gen_salt('bf', 10)), 'TUTOR'),
+('test_3', 'test_3@gmail.com', crypt('test_3', gen_salt('bf', 10)), 'STAFF'),
+('test_4', 'test_4@gmail.com', crypt('test_4', gen_salt('bf', 10)), 'NA') ;

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {Header } from '../Header/Header'
 import './Dashboard.css';
 import {Navbar} from '../Navbar/Navbar';
+import {SectionHeader} from '../SectionHeader/SectionHeader';
 
 export const Dashboard = () => {
 
@@ -45,13 +46,56 @@ export const Dashboard = () => {
     fetchData();
   }, []);
 
+  const Table = ({ data }) => {
+    return (
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.username}</td>
+              <td>{item.email}</td>
+              <td>{item.user_type}</td>
+              <td>
+                <button onClick={() => handleEdit(item.id)}>Edit</button>
+                <button onClick={() => handleDelete(item.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
+
+  const handleEdit = (id) => {
+    console.log(`Edit user with ID: ${id}`);
+    // Implement your edit logic here, e.g., navigate to an edit page
+  };
+  
+  const handleDelete = (id) => {
+    console.log(`Delete user with ID: ${id}`);
+    // Implement your delete logic here
+  };
+
   return (
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
-      <Navbar />
+      <Navbar /> 
       <div className='main'>
+        <SectionHeader section={'Dashboard'} />
         <p>body comes here</p>
+        <Table data={data} />
       </div>
     </div>
   );
+
 };

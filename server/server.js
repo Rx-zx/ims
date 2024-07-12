@@ -12,6 +12,7 @@ require("dotenv").config();
 const app = express();
 
 const db = require("./app/models");
+const { log } = require("console");
 
 db.sequelize.sync()
   .then(() => {
@@ -40,7 +41,6 @@ routerFiles.forEach((file) => {
   if (file.endsWith('.js')) {
     const router = require(path.join(routerDir, file));
     const isLoginRouter = file.toLowerCase().includes('login');
-    
     if(! isLoginRouter){
       app.use(authenticateUser);
     }
@@ -48,7 +48,7 @@ routerFiles.forEach((file) => {
   }
 });
 
-const PORT = process.env.APP_PORT || 8080;
+const PORT = process.env.APP_PORT || 8081;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

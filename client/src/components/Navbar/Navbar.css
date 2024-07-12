@@ -1,9 +1,9 @@
 .vertical-navbar {
-    width: 200px;
+    width: 15%;
     background-color: #333; 
     padding: 15px;
-    height: 100vh;
-    margin-top: 4%;
+    height: 90%;
+    margin-top: 5%;
     position:fixed;
   }
   
@@ -24,6 +24,7 @@
     display: block;
     padding: 10px;
     border-radius: 5px;
+    width: 80%;
     transition: background-color 0.3s;
   }
   
