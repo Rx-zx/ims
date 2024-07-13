@@ -17,8 +17,9 @@ export const News = () => {
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
       <Navbar /> 
+      <SectionHeader section={'News'} is_create={true}/>
       <div className='main'>
-        <SectionHeader section={'News'} />
+        
         <p>news page comes here, hii</p>
       </div>
     </div>

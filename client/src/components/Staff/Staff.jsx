@@ -17,8 +17,9 @@ export const Staff = () => {
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
       <Navbar /> 
+      <SectionHeader section={'Staff'} is_create={true}/>
       <div className='main'>
-        <SectionHeader section={'Staff'} />
+       
         <p>staff page comes here, hii</p>
       </div>
     </div>

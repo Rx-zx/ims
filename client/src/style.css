@@ -1,0 +1,108 @@
+:root {
+  --primary-background: #DCC9B6;
+  --secondary-background: #A39171;
+  --primary-text: #6D4C3D;
+  --secondary-text: #727D71;
+  --text-color: #2c3e50;
+  --border-color: #bdc3c7;
+  --link-color: #2980b9;
+  --button-bg-color: #3498db;
+  --button-text-color: #fff;
+  --button-hover-bg-color: #2980b9;
+  --button-hover-text-color: #fff;
+  --header-bg-color: #34495e;
+  --header-text-color: #ecf0f1;
+}
+
+.main {
+position: fixed;
+background-color: var(--login-background);
+width: 85%;
+height: 90%;
+margin-top: 11%;
+margin-left: 16.65%;
+}
+
+.data-table {
+width: 97%;
+text-align: center;
+margin-top: 25px;
+margin-left: 10px;
+margin-right: 10px;
+background-color: #f9f9f9;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+overflow: hidden;
+}
+
+.data-table th,
+.data-table td {
+border: 1px solid #ddd;
+padding: 12px 15px;
+transition: background-color 0.3s, color 0.3s;
+}
+
+.data-table th {
+background-color: #4CAF50;
+color: #fff;
+text-align: center;
+font-weight: bold;
+font-size: 18px;
+}
+
+.data-table tr {
+background-color: #ffffff;
+border-radius: 4px;
+overflow: hidden;
+}
+
+.data-table tr:hover {
+background-color: #e0f2f1;
+color: #333;
+transform: scale(1.02);
+transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.data-table td {
+color: #555;
+font-size: 14px;
+}
+
+.data-table td:first-child {
+border-top-left-radius: 8px;
+}
+
+.data-table td:last-child {
+border-top-right-radius: 8px;
+}
+
+
+.data-table button {
+margin: 0 15px; 
+padding: 8px 10px;
+color: #fff;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s, transform 0.3s;
+font-size: 14px;
+width: 80px;
+}
+
+.editBtn{
+  background-color: #3376bd;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(38, 143, 255, 0.3);
+}
+
+.deleteBtn{
+  background-color: #c85858;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 67, 38, 0.3);
+}
+
+.data-table button:hover {
+transform: scale(1.15);
+}
+
+

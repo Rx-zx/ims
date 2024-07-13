@@ -50,8 +50,8 @@ export const TimeTable = () => {
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
       <Navbar /> 
+      <SectionHeader section={'Time Table'} is_create={true}/>
       <div className='main'>
-        <SectionHeader section={'Time Table'} />
         <p>body comes here, hii</p>
       </div>
     </div>

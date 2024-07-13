@@ -66,8 +66,8 @@ export const Dashboard = () => {
               <td>{item.email}</td>
               <td>{item.user_type}</td>
               <td>
-                <button onClick={() => handleEdit(item.id)}>Edit</button>
-                <button onClick={() => handleDelete(item.id)}>Delete</button>
+                <button className="editBtn" onClick={() => handleEdit(item.id)}>Edit</button>
+                <button className="deleteBtn" onClick={() => handleDelete(item.id)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -90,9 +90,8 @@ export const Dashboard = () => {
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
       <Navbar /> 
+      <SectionHeader section={'Dashboard'} />
       <div className='main'>
-        <SectionHeader section={'Dashboard'} />
-        <p>body comes here</p>
         <Table data={data} />
       </div>
     </div>

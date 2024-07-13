@@ -48,7 +48,7 @@ routerFiles.forEach((file) => {
   }
 });
 
-const PORT = process.env.APP_PORT || 8081;
+const PORT = process.env.APP_PORT || 8083;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
