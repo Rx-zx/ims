@@ -49,10 +49,11 @@ export const LoginSignup = () => {
   };
 
   return (
-    <div className='page login-page'>
-      <a className="home-button"  href="/"><img src={home} className="home-button-img"  alt="" /></a>
+    <div className='page-login-page'>
+     
+      
     <div className='container'>
-    
+    <a className="home-button"  href="/"><img src={home} className="home-button-img"  alt="" /></a>
       <div className="header">
         <div className="text">LOGIN</div>
         <div className="underline"></div>
