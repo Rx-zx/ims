@@ -4,6 +4,7 @@ import './LoginSignup.css'
 import email_icon from '../../assets/login_email.png'
 import password_icon from '../../assets/login_password.png'
 import home from '../../assets/home.png'
+import '../../../src/style.css'
 import { useNavigate } from 'react-router-dom';
 import { Message } from '../Message/Message.jsx';
 

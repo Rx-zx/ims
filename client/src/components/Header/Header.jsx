@@ -16,6 +16,11 @@ export const Header = ({type ,action}) => {
 
   return (
     <header className="fixed-header">
+      <div className="logo">
+        <Link to={link}>
+          <img src={logo_icon} alt="Logo" />
+        </Link> 
+      </div>
       { (
         <div className="logout-btn">
           <button className="logout-btn-btn" onClick={handleLogout}>{action}</button>

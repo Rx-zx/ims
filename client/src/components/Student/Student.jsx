@@ -17,8 +17,9 @@ export const Student = () => {
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
       <Navbar /> 
+      <SectionHeader section={'Student'} is_create={true} />
       <div className='main'>
-        <SectionHeader section={'Student'} />
+       
         <p>student page comes here, hii</p>
       </div>
     </div>

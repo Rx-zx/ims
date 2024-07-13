@@ -17,8 +17,8 @@ export const Report = () => {
     <div>
       <Header type={'dashboard'} action = {"Logout"}/>
       <Navbar /> 
+      <SectionHeader section={'Report'} />
       <div className='main'>
-        <SectionHeader section={'Report'} />
         <p>report page comes here, hii</p>
       </div>
     </div>
