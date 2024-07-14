@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import {useAuth}  from '../../services/authContex';
 import { useNavigate } from 'react-router-dom';
-import {Header } from '../Header/Header'
-import './Dashboard.css';
-import {Navbar} from '../Navbar/Navbar';
-import {SectionHeader} from '../SectionHeader/SectionHeader';
+import { Header } from '../Header/Header';
+import './Tutor.css';
+import { Navbar } from '../Navbar/Navbar';
+import { SectionHeader } from '../SectionHeader/SectionHeader';
 
-export const Dashboard = () => {
-
+export const Tutor = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Number of items per page
@@ -16,15 +14,21 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
   const localToken = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    if (!localToken) {
+      localStorage.removeItem('authToken');
+      navigate('/login');
+    }
+  }, [localToken, navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await api.get(`/api/user/all?page=${currentPage}&limit=${itemsPerPage}`);
+        const response = await api.get(`/api/tutor/all?page=${currentPage}&limit=${itemsPerPage}`);
         if (response.status === 200) {
           const { data, totalPages } = response.data; 
           setData(data);
@@ -52,33 +56,48 @@ export const Dashboard = () => {
     }
   };
 
-  const Table = ({ data }) => {
-    return (
-      <table className="data-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
+  const handleEdit = (id) => {
+    console.log(`Edit user with ID: ${id}`);
+    // Implement your edit logic here, e.g., navigate to an edit page
+  };
+  
+  const handleDelete = (id) => {
+    console.log(`Delete user with ID: ${id}`);
+    // Implement your delete logic here
+  };
+
+
+  const Table = ({ data , currentPage, totalPages }) => (
+    <table className="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User ID</th>
+          <th>Title</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Contact</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((item) => (
+          <tr key={item.id}>
+            <td>{item.id}</td>
+            <td>{item.userid}</td>
+            <td>{item.title}</td>
+            <td>{item.firstname}</td>
+            <td>{item.lastname}</td>
+            <td>{item.contact}</td>
+            <td>
+              <button className="editBtn" onClick={() => handleEdit(item.id)}>Edit</button>
+              <button className="deleteBtn" onClick={() => handleDelete(item.id)}>Delete</button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.username}</td>
-              <td>{item.email}</td>
-              <td>{item.user_type}</td>
-              <td>
-                <button className="editBtn" onClick={() => handleEdit(item.id)}>Edit</button>
-                <button className="deleteBtn" onClick={() => handleDelete(item.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
+        ))}
+      </tbody>
+      <tfoot>
+      <td colSpan="4" class="tfoot-left"></td>
       <div className="pagination">
           <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             Previous
@@ -97,29 +116,22 @@ export const Dashboard = () => {
           </button>
         </div>
       </tfoot>
-      </table>
-    );
-  };
-
-  const handleEdit = (id) => {
-    console.log(`Edit user with ID: ${id}`);
-    // Implement your edit logic here, e.g., navigate to an edit page
-  };
-  
-  const handleDelete = (id) => {
-    console.log(`Delete user with ID: ${id}`);
-    // Implement your delete logic here
-  };
+      
+    </table>
+    
+  );
 
   return (
     <div>
-      <Header type={'dashboard'} action = {"Logout"}/>
-      <Navbar /> 
-      <SectionHeader section={'Dashboard'} />
+      <Header type={'dashboard'} action={"Logout"} />
+      <Navbar />
+      <SectionHeader section={'Tutor'} is_create={true} />
       <div className='main'>
-        <Table data={data} />
+        {loading && <p>Loading...</p>}
+        {error && <p className="error">{error}</p>}
+        <Table data={data} currentPage={currentPage} totalPages={totalPages}  />
+
       </div>
     </div>
   );
-
 };

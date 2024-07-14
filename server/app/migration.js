@@ -15,7 +15,6 @@ async function runMigrations() {
   try {
     await client.connect();
 
-    // Read and execute each SQL migration file
     const migrationPath = path.join(__dirname, 'migrations');
     const migrationFiles = fs.readdirSync(migrationPath);
 

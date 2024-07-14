@@ -1,6 +1,7 @@
 const dbConfig = require("../config/db.config.js");
+const { Sequelize } = require('sequelize');
 
-const Sequelize = require("sequelize");
+
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
@@ -8,14 +9,23 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   logging: false,
 });
 
-const db = {};
+const User = require('./user.model')(sequelize, Sequelize.DataTypes);
+const Student = require('./student.model')(sequelize, Sequelize.DataTypes);
+const Tutor = require('./tutor.model')(sequelize, Sequelize.DataTypes);
+const Staff = require('./staff.model')(sequelize, Sequelize.DataTypes);
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+sequelize.sync()
+  .then(() => {
+    console.log('Database synchronized.');
+  })
+  .catch(err => {
+    console.error('Failed to sync database:', err.message);
+  });
 
-db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-db.users = require("./users.model.js")(sequelize, Sequelize);
-db.teacher = require("./teacher.model.js")(sequelize, Sequelize);
-db.timetable = require("./timetable.model.js")(sequelize, Sequelize);
-
-module.exports = db;
+module.exports = {
+  sequelize,
+  User,
+  Student,
+  Tutor,
+  Staff
+};
