@@ -22,6 +22,11 @@ export const Navbar = () => {
           </NavLink>
         </li>
         <li>
+        <NavLink to="/tutor">
+            Tutor
+          </NavLink>
+        </li>
+        <li>
         <NavLink to="/staff">
             Staff
           </NavLink>

@@ -11,17 +11,6 @@ require("dotenv").config();
 
 const app = express();
 
-const db = require("./app/models");
-const { log } = require("console");
-
-db.sequelize.sync()
-  .then(() => {
-    console.log("Database synchronized.");
-  })
-  .catch((err) => {
-    console.error("Failed to sync database:", err.message);
-  });
-
 // Middleware
 app.use(cors());
 app.use(express.json());

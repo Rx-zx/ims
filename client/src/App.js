@@ -8,6 +8,7 @@ import { TimeTable } from "./components/TimeTable/TimeTable";
 import { Student } from "./components/Student/Student";
 import { Staff } from "./components/Staff/Staff";
 import { Report } from "./components/Report/Report";
+import { Tutor } from "./components/Tutor/Tutor";
 import { News } from "./components/News/News";
 import './App.css'
 
@@ -21,6 +22,7 @@ return (
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/timetable" element={<TimeTable />} />
     <Route path="/staff" element={<Staff />} />
+    <Route path="/tutor" element={<Tutor />} />
     <Route path="/student" element={<Student />} />
     <Route path="/news" element={<News />} />
     <Route path="/report" element={<Report />} />

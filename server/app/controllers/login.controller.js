@@ -1,5 +1,4 @@
-const db = require("../models");
-const User = db.users;
+const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const helpers = require('../helpers/validations');
@@ -21,7 +20,7 @@ exports.login = async (req, res) => {
         where: { email: email }
       });
     if (user && ( await bcrypt.compare(password, user.password))) {
-        // Create token
+
         const token = jwt.sign(
           { user_id: user.id, email:user.email, user_type :user.user_type },
           process.env.SECRET_KEY,
@@ -75,7 +74,7 @@ exports.signup = async (req, res) => {
         { user_id: createdUser.id, email:createdUser.email, user_type :createdUser.user_type },
         process.env.SECRET_KEY,
         {
-          expiresIn: "2m",
+          expiresIn: "2h",
         }
       );
     }

@@ -1,5 +1,4 @@
-const db = require("../models");
-const User = db.users;
+const { User } = require('../models');
 const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 
@@ -31,10 +30,26 @@ exports.validate = (method) => {
 };
 
 // Retrieve all Users from the database
-exports.findAll = (req, res) => {
-  User.findAll()
-    .then(data => res.status(200).send({ data }))
-    .catch(err => res.status(500).send({ message: err.message || "Some error occurred while retrieving Users." }));
+exports.findAll = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await User.findAndCountAll({
+      limit,
+      offset,
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({
+      data: rows,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 
@@ -121,8 +136,6 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
   const id = req.params.id;
-
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -141,4 +154,5 @@ exports.delete = async (req, res) => {
     res.status(500).send({ message: `Could not delete User with id=${id}: ${err.message}` });
   }
 };
+
 
