@@ -1,4 +1,4 @@
-const db = require("../models");
+
 const { User, Staff } = require('../models');
 const bcrypt = require('bcryptjs');
 const { log } = require("console");
@@ -124,32 +124,86 @@ exports.findOne = (req, res) => {
 exports.delete = async (req, res) => {
   const id = req.params.id;
   const errors = validationResult(req);
+  
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   try {
-
-   async () => {
     const staff = await Staff.findByPk(id);
+    
+    if (!staff) {
+      return res.status(404).send({ message: `Cannot find Staff with id=${id}.` });
+    }
+
     const userid = staff.userid;
     const user = await User.findByPk(userid);
     
-    if (!staff) {
-      return res.status(404).send({ message: `Cannot find User with id=${id}.` });
+    if (!user) {
+      return res.status(404).send({ message: `Cannot find User with id=${userid}.` });
     }
 
     await Staff.destroy({ where: { id } });
-console.log(user);
-    await User.destroy({ where: { id :userid } });
-    
+    await User.destroy({ where: { id: userid } });
 
-    return staff;
-  }
-    
-    res.send({ message: "User was deleted successfully!"  });
-  
+    res.send({ message: "User was deleted successfully!", staff });
+
   } catch (err) {
     res.status(500).send({ message: `Could not delete User with id=${id}: ${err.message}` });
+  }
+};
+
+
+exports.update = async (req, res) => {
+  const id = req.params.id; 
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { username, password, email, firstname, lastname, title, contact, position } = req.body;
+
+  try {
+    const staff = await Staff.findByPk(id);
+    
+    if (!staff) {
+      return res.status(404).send({ message: `Cannot find Staff with id=${id}.` });
+    }
+
+    const user = await User.findByPk(tutor.userid);
+    
+    if (!user) {
+      return res.status(404).send({ message: `Cannot find User with id=${tutor.userid}.` });
+    }
+
+    const existingUser = await User.findOne({ where: { email } });
+    const existingStaff = await Staff.findOne({ where: { firstname, lastname } });
+
+    if ((existingUser && existingUser.id !== user.id) || (existingStaff && existingStaff.id !== staff.id)) {
+      throw new Error('Email or Tutor name already exists');
+    }
+
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : user.password;
+
+    await user.update({
+      username: username || user.username,
+      email: email || user.email,
+      password: hashedPassword,
+    });
+
+    await staff.update({
+      firstname: firstname || staff.firstname,
+      lastname: lastname || staff.lastname,
+      title: title || staff.title,
+      contact: contact || staff.contact,
+      position: position || staff.position,
+    });
+
+    res.status(200).send({ message: "Staff was updated successfully!", staff, user });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || 'Some error occurred while updating the Staff.'
+    });
   }
 };

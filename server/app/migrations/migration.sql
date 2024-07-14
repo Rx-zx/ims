@@ -11,7 +11,12 @@ DROP TABLE IF EXISTS "staff";
 DROP TABLE IF EXISTS "tutor";
 DROP TABLE IF EXISTS "student";
 DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS "grade";
+DROP TABLE IF EXISTS "subject";
+DROP TABLE IF EXISTS "classroom";
 
+
+--USET TABLE DETAILS--
 CREATE TABLE IF NOT EXISTS "user" (
   id SERIAL PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
@@ -22,11 +27,8 @@ CREATE TABLE IF NOT EXISTS "user" (
   updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
 );
 
--- --TRUNCATE BEFORE INSERTING-----
 TRUNCATE "user";
--- -- INSERT data into the users table
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
 INSERT INTO "user" (username, email, password, user_type) VALUES
 ('admin', 'admin@gmail.com', crypt('123', gen_salt('bf', 10)), 'ADMIN'), 
 ('student', 'student@gmail.com', crypt('123', gen_salt('bf', 10)), 'STUDENT'), 
@@ -47,10 +49,7 @@ CREATE TABLE IF NOT EXISTS "student" (
   updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
 );
 
--- --TRUNCATE BEFORE INSERTING-----
 TRUNCATE "student";
--- -- INSERT data into the users table
-
 -- INSERT INTO "student" (username, email, password, user_type) VALUES
 -- ('test_1', '123@gmail.com', crypt('123', gen_salt('bf', 10)), 'ADMIN'), 
 -- ('test_2', 'test_2@gmail.com', crypt('test_2', gen_salt('bf', 10)), 'TUTOR'),
@@ -69,6 +68,8 @@ CREATE TABLE IF NOT EXISTS "tutor" (
   created_at timestamptz  DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
 );
+TRUNCATE "tutor";
+--insert into
 
 
 CREATE TABLE IF NOT EXISTS "staff" (
@@ -81,4 +82,24 @@ CREATE TABLE IF NOT EXISTS "staff" (
   contact VARCHAR(255) NOT NULL ,
   created_at timestamptz  DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
+);
+TRUNCATE "staff";
+--insert into
+
+
+
+CREATE TABLE  IF NOT EXISTS "subject" (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE CHECK (name = UPPER(name))
+);
+
+CREATE TABLE  IF NOT EXISTS "grade" (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE  IF NOT EXISTS "classroom" (
+    id SERIAL PRIMARY KEY,
+    capacity INT NOT NULL DEFAULT 10,
+    name VARCHAR(255) NOT NULL UNIQUE
 );

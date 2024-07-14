@@ -1,4 +1,4 @@
-const db = require("../models");
+
 const { User, Student } = require('../models');
 const bcrypt = require('bcryptjs');
 const { log } = require("console");
@@ -70,7 +70,7 @@ exports.create = async (req, res) => {
         username: username,
         email: email,
         password: hashedPassword,
-        user_type: "STUDENT",
+        user_type: "STUDENT",//
       });
 
       const newStudent = await Student.create({
@@ -118,29 +118,84 @@ exports.findOne = (req, res) => {
 exports.delete = async (req, res) => {
   const id = req.params.id;
   const errors = validationResult(req);
+  
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   try {
-
     const student = await Student.findByPk(id);
-    const userId = student.userid;
-    const user = await User.findByPk(userId);
     
     if (!student) {
-      return res.status(404).send({ message: `Cannot find User with id=${id}.` });
+      return res.status(404).send({ message: `Cannot find Student with id=${id}.` });
+    }
+
+    const userid = student.userid;
+    const user = await User.findByPk(userid);
+    
+    if (!user) {
+      return res.status(404).send({ message: `Cannot find User with id=${userid}.` });
     }
 
     await Student.destroy({ where: { id } });
-    
-    if(user){
-      await User.destroy({ where: { userId } });
-    }
-    
-    
-    res.send({ message: "User was deleted successfully!"  + student});
+    await User.destroy({ where: { id: userid } });
+
+    res.send({ message: "User was deleted successfully!", student });
+
   } catch (err) {
     res.status(500).send({ message: `Could not delete User with id=${id}: ${err.message}` });
+  }
+};
+
+exports.update = async (req, res) => {
+  const id = req.params.id; // assuming id is passed as a route parameter
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { username, password, email, firstname, lastname, title, contact } = req.body;
+
+  try {
+    const student = await Student.findByPk(id);
+    
+    if (!student) {
+      return res.status(404).send({ message: `Cannot find Student with id=${id}.` });
+    }
+
+    const user = await User.findByPk(student.userid);
+    
+    if (!user) {
+      return res.status(404).send({ message: `Cannot find User with id=${tutor.userid}.` });
+    }
+
+    const existingUser = await User.findOne({ where: { email } });
+    const existingStudent = await Student.findOne({ where: { firstname, lastname } });
+
+    if ((existingUser && existingUser.id !== user.id) || (existingStudent && existingStudent.id !== student.id)) {
+      throw new Error('Email or Tutor name already exists');
+    }
+
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : user.password;
+
+    await user.update({
+      username: username || user.username,
+      email: email || user.email,
+      password: hashedPassword,
+    });
+
+    await student.update({
+      firstname: firstname || student.firstname,
+      lastname: lastname || student.lastname,
+      grade: grade || student.grade,
+      contact: contact || student.contact,
+    });
+
+    res.status(200).send({ message: "Student was updated successfully!", student, user });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || 'Some error occurred while updating the Tutor.'
+    });
   }
 };
