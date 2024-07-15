@@ -13,18 +13,22 @@ export const LoginSignup = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(null);
+  const [selectedRole, setSelectedRole] = useState('');
   const navigate = useNavigate();
 
   const handleClose = () => {
     setMessage(null);
   };
 
+  const handleRoleChange = (role) => {
+    setSelectedRole(role);
+  };
 
   const handleLogin = async () => {
     const response = await fetch('/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password , selectedRole})
     });
 
     if (response.ok) {
@@ -33,7 +37,7 @@ export const LoginSignup = () => {
       setMessage({ type: 'success', text: 'Login successful!' });
       const authToken = data.token;
       localStorage.setItem('authToken', authToken);
-      navigate('/dashboard');
+      navigate('/student');
       
     } else {
       const error = await response.json();
@@ -66,6 +70,15 @@ export const LoginSignup = () => {
         <div className="input">
           <img src={password_icon} alt="" />
           <input type="password" placeholder='Password' onChange={(e) => setPassword(e.target.value)} required onKeyDown={handleKeyDown}/>
+        </div>
+        <div className="input">
+        <select onChange={(e) => handleRoleChange(e.target.value)} required>
+        <option value="">Select Role</option>
+        <option value="ADMIN">ADMIN</option>
+        <option value="STUDENT">STUDENT</option>
+        <option value="TUTOR">TUTOR</option>
+        <option value="STAFF">STAFF</option>
+      </select>
         </div>
         <div className="forgot-password">Forgot Password <span>Click here!</span></div>
         <div className="submit-container">

@@ -21,7 +21,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to Institue Management System application." });
 });
 
-// Dynamically load routers from the 'app/routes' directory
 const routerDir = path.join(__dirname, 'app', 'routes');
 const routerFiles = fs.readdirSync(routerDir);
 

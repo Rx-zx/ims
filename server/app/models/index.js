@@ -9,11 +9,6 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   logging: false,
 });
 
-const User = require('./user.model')(sequelize, Sequelize.DataTypes);
-const Student = require('./student.model')(sequelize, Sequelize.DataTypes);
-const Tutor = require('./tutor.model')(sequelize, Sequelize.DataTypes);
-const Staff = require('./staff.model')(sequelize, Sequelize.DataTypes);
-
 sequelize.sync()
   .then(() => {
     console.log('Database synchronized.');
@@ -22,10 +17,28 @@ sequelize.sync()
     console.error('Failed to sync database:', err.message);
   });
 
+const User = require('./user.model')(sequelize, Sequelize.DataTypes);
+const Student = require('./student.model')(sequelize, Sequelize.DataTypes);
+const Tutor = require('./tutor.model')(sequelize, Sequelize.DataTypes);
+const Staff = require('./staff.model')(sequelize, Sequelize.DataTypes);
+const Grade = require('./grade.model')(sequelize, Sequelize.DataTypes);
+const Subject = require('./subject.model')(sequelize, Sequelize.DataTypes);
+const Classroom = require('./classroom.model')(sequelize, Sequelize.DataTypes);
+const SubjectTutor = require('./subject_tutor.model')(sequelize, Sequelize.DataTypes);
+
+SubjectTutor.belongsTo(Tutor, { foreignKey: 'tutorid', as: 'tutor' });
+SubjectTutor.belongsTo(Subject, { foreignKey: 'subjectid', as: 'subject' });
+SubjectTutor.belongsTo(Grade, { foreignKey: 'gradeid', as: 'grade' });
+
 module.exports = {
   sequelize,
   User,
   Student,
   Tutor,
-  Staff
+  Staff,
+  Grade,
+  Subject,
+  Classroom,
+  SubjectTutor
+
 };

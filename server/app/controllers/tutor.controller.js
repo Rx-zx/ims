@@ -1,4 +1,4 @@
-const db = require("../models");
+
 const { User, Tutor } = require('../models');
 const bcrypt = require('bcryptjs');
 const { log } = require("console");
@@ -14,11 +14,9 @@ exports.create = async (req, res) => {
   const { username, password, email, firstname, lastname, title , contact } = req.body;
 
   try {
+      const existingTutor = await Tutor.findOne({ where: { firstname, lastname , email} });
 
-      const existingUser = await User.findOne({ where: { email } });
-      const existingTutor = await Tutor.findOne({ where: { firstname, lastname } });
-
-      if (existingUser || existingTutor) {
+      if (existingTutor) {
         throw new Error('Email or Tutor already exists');
       }
 
@@ -26,19 +24,14 @@ exports.create = async (req, res) => {
 
       const newTutorData = async () => {
 
-        const newUser = await User.create({
+        const newTutor = await Tutor.create({
+          firstname: firstname,
           username: username,
           email: email,
           password: hashedPassword,
-          user_type: "TUTOR",
-        });
-
-        const newTutor = await Tutor.create({
-          firstname: firstname,
           lastname: lastname,
           title: title,
           contact: contact,
-          userid: newUser.id
         });
 
         return newTutor
@@ -97,7 +90,7 @@ exports.findOne = (req, res) => {
       });
   };
 
-// Update a tutor by the id in the request
+
 exports.update = (req, res) => {
   const id = req.params.id;
 
@@ -117,7 +110,7 @@ exports.update = (req, res) => {
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating tutor with id=" + id
+        message: "Error updating tutor with id=" + id + "Error" + err
       });
     });
 };
@@ -125,25 +118,68 @@ exports.update = (req, res) => {
 exports.delete = async (req, res) => {
   const id = req.params.id;
   const errors = validationResult(req);
+  
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   try {
-
     const tutor = await Tutor.findByPk(id);
-    const userId = tutor.userid;
-    const user = await User.findByPk(userId);
     
-    if (!user || !tutor) {
-      return res.status(404).send({ message: `Cannot find User with id=${id}.` });
+    if (!tutor) {
+      return res.status(404).send({ message: `Cannot find Student with id=${id}.` });
     }
 
-    await Tutor.destroy({ where: { id } });
-    await User.destroy({ where: { userId } });
-    res.send({ message: "User was deleted successfully!" });
+    await tutor.destroy({ where: { id } });
+
+    res.send({ message: "User was deleted successfully!", tutor });
+
   } catch (err) {
     res.status(500).send({ message: `Could not delete User with id=${id}: ${err.message}` });
   }
 };
+
+exports.update = async (req, res) => {
+  const id = req.params.id;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { username, password, email, firstname, lastname, title, contact } = req.body;
+
+  try {
+    const tutor = await Tutor.findByPk(id);
+    
+    if (!tutor) {
+      return res.status(404).send({ message: `Cannot find Tutor with id=${id}.` });
+    }
+
+    const existingTutor = await Tutor.findOne({ where: { firstname, lastname, email } });
+
+    if (existingTutor && existingTutor.id !== tutor.id) {
+      throw new Error('Email or Tutor name already exists');
+    }
+
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : tutor.password;
+
+    await tutor.update({
+      username: username || tutor.username,
+      email: email || tutor.email,
+      password: hashedPassword,
+      firstname: firstname || tutor.firstname,
+      lastname: lastname || tutor.lastname,
+      title: title || tutor.title,
+      contact: contact || tutor.contact,
+    });
+
+    res.status(200).send({ message: "Tutor was updated successfully!", tutor });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || 'Some error occurred while updating the Tutor.'
+    });
+  }
+};
+
 
