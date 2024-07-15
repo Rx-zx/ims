@@ -24,8 +24,8 @@ exports.create = async (req, res) => {
   const { name , capacity } = req.body;
 
   try {
-    const Classroom = await Classroom.create({ name, capacity });
-    res.status(201).send(Classroom);
+    const classroom = await Classroom.create({ name, capacity });
+    res.status(201).send(classroom);
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
       res.status(400).send({
@@ -42,8 +42,8 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const Classrooms = await Classroom.findAll();
-    res.status(200).send(Classrooms);
+    const classrooms = await Classroom.findAll();
+    res.status(200).send(classrooms);
   } catch (err) {
     res.status(500).send({
       message: err.message || 'Some error occurred while retrieving Classrooms.'
@@ -56,11 +56,11 @@ exports.findOne = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const Classroom = await Classroom.findByPk(id);
-    if (!Classroom) {
+    const classroom = await Classroom.findByPk(id);
+    if (!classroom) {
       return res.status(404).send({ message: `Cannot find Classroom with id=${id}.` });
     }
-    res.status(200).send(Classroom);
+    res.status(200).send(classroom);
   } catch (err) {
     res.status(500).send({
       message: `Error retrieving Classroom with id=${id}`
@@ -80,12 +80,12 @@ exports.update = async (req, res) => {
   const { name , capacity} = req.body;
 
   try {
-    const Classroom = await Classroom.findByPk(id);
+    const classroom = await Classroom.findByPk(id);
     if (!Classroom) {
       return res.status(404).send({ message: `Cannot find Classroom with id=${id}.` });
     }
 
-    await Classroom.update({ name, capcity });
+    await Classroom.update({ name, capacity });
     res.status(200).send({ message: "Classroom was updated successfully." });
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
@@ -105,8 +105,8 @@ exports.delete = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const Classroom = await Classroom.findByPk(id);
-    if (!Classroom) {
+    const classroom = await Classroom.findByPk(id);
+    if (!classroom) {
       return res.status(404).send({ message: `Cannot find Classroom with id=${id}.` });
     }
 

@@ -1,12 +1,13 @@
-const { User } = require('../models');
+const { User, Staff, Student, Tutor } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const helpers = require('../helpers/validations');
 require('dotenv')
 
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, selectedRole } = req.body;
 
+    const type = selectedRole;
     if (!helpers.isValidObject(req.body)) {
       return res.status(401).send({ message: "Input is invalid. Some elements are null or empty." });
     }
@@ -15,14 +16,30 @@ exports.login = async (req, res) => {
         res.status(401).send("Enter correct email & password");
         
     }
-    else{
-      const user = await User.findOne({
-        where: { email: email }
-      });
-    if (user && ( await bcrypt.compare(password, user.password))) {
+    let model;
+    switch (type) {
+      case 'ADMIN':
+        model = User;
+        break;
+      case 'STAFF':
+        model = Staff;
+        break;
+      case 'STUDENT':
+        model = Student;
+        break;
+      case 'TUTOR':
+        model = Tutor;
+        break;
+      default:
+        return res.status(400).json({ message: "Invalid user type." });
+    }
+
+    const user = await model.findOne({ where: { email: email } });
+
+      if (user && ( await bcrypt.compare(password, user.password))) {
 
         const token = jwt.sign(
-          { user_id: user.id, email:user.email, user_type :user.user_type },
+          { user_id: user.id, email:user.email, user_type :type },
           process.env.SECRET_KEY,
           {
             expiresIn: "3h",
@@ -37,7 +54,7 @@ exports.login = async (req, res) => {
         res.status(401).send({message :"Invalid Credentials"});
     }
 
-    }
+    
     
 };
 

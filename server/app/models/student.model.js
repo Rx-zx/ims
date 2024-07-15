@@ -7,16 +7,24 @@ const Student = (sequelize) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    userid: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'user', 
-        key: 'id',
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false, 
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false, 
+      unique: true,
+      validate: {
+        isEmail: true, 
       },
-      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false, 
     },
     firstname: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING,//
       allowNull: false,
     },
     lastname: {

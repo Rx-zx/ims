@@ -1,5 +1,4 @@
--- --CREATE users table--
-
+-- Create user_type ENUM if not exists
 DO $$ 
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_type') THEN
@@ -7,99 +6,133 @@ BEGIN
   END IF;
 END $$;
 
+-- Drop existing tables
+DROP TABLE IF EXISTS "subject_tutor";
 DROP TABLE IF EXISTS "staff";
 DROP TABLE IF EXISTS "tutor";
 DROP TABLE IF EXISTS "student";
-DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS "grade";
 DROP TABLE IF EXISTS "subject";
 DROP TABLE IF EXISTS "classroom";
 
-
---USET TABLE DETAILS--
-CREATE TABLE IF NOT EXISTS "user" (
+-- Create users table
+CREATE TABLE IF NOT EXISTS "student" (
   id SERIAL PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL ,
-  user_type user_type NOT NULL DEFAULT 'NA',
-  created_at timestamptz  DEFAULT CURRENT_TIMESTAMP,
-  updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
-);
-
-TRUNCATE "user";
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-INSERT INTO "user" (username, email, password, user_type) VALUES
-('admin', 'admin@gmail.com', crypt('123', gen_salt('bf', 10)), 'ADMIN'), 
-('student', 'student@gmail.com', crypt('123', gen_salt('bf', 10)), 'STUDENT'), 
-('tutor', 'tutor@gmail.com', crypt('123', gen_salt('bf', 10)), 'TUTOR'),
-('staff', 'staff@gmail.com', crypt('123', gen_salt('bf', 10)), 'STAFF'),
-('test', 'test@gmail.com', crypt('123', gen_salt('bf', 10)), 'NA') ;
-
-
-
-CREATE TABLE IF NOT EXISTS "student" (
-  id SERIAL PRIMARY KEY,
-  userid INT REFERENCES "user"(id),
+  password VARCHAR(255) NOT NULL,
   firstname VARCHAR(255) NOT NULL,
   lastname VARCHAR(255) NOT NULL,
-  contact VARCHAR(255) NOT NULL ,
-  grade VARCHAR(255) NOT NULL ,
-  created_at timestamptz  DEFAULT CURRENT_TIMESTAMP,
-  updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
+  contact VARCHAR(255) NOT NULL,
+  grade VARCHAR(255) NOT NULL,
+  created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz DEFAULT CURRENT_TIMESTAMP 
 );
-
-TRUNCATE "student";
--- INSERT INTO "student" (username, email, password, user_type) VALUES
--- ('test_1', '123@gmail.com', crypt('123', gen_salt('bf', 10)), 'ADMIN'), 
--- ('test_2', 'test_2@gmail.com', crypt('test_2', gen_salt('bf', 10)), 'TUTOR'),
--- ('test_3', 'test_3@gmail.com', crypt('test_3', gen_salt('bf', 10)), 'STAFF'),
--- ('test_4', 'test_4@gmail.com', crypt('test_4', gen_salt('bf', 10)), 'NA') ;
-
-
 
 CREATE TABLE IF NOT EXISTS "tutor" (
   id SERIAL PRIMARY KEY,
-  userid INT REFERENCES "user"(id),
-  title VARCHAR(255) NOT NULL ,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  title VARCHAR(255) NOT NULL,
   firstname VARCHAR(255) NOT NULL,
   lastname VARCHAR(255) NOT NULL,
-  contact VARCHAR(255) NOT NULL ,
-  created_at timestamptz  DEFAULT CURRENT_TIMESTAMP,
-  updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
+  contact VARCHAR(255) NOT NULL,
+  created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz DEFAULT CURRENT_TIMESTAMP 
 );
-TRUNCATE "tutor";
---insert into
-
 
 CREATE TABLE IF NOT EXISTS "staff" (
   id SERIAL PRIMARY KEY,
-  userid INT REFERENCES "user"(id),
-  title VARCHAR(255) NOT NULL ,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  title VARCHAR(255) NOT NULL,
   firstname VARCHAR(255) NOT NULL,
   lastname VARCHAR(255) NOT NULL,
   position VARCHAR(255) NOT NULL,
-  contact VARCHAR(255) NOT NULL ,
-  created_at timestamptz  DEFAULT CURRENT_TIMESTAMP,
-  updated_at timestamptz  DEFAULT CURRENT_TIMESTAMP 
-);
-TRUNCATE "staff";
---insert into
-
-
-
-CREATE TABLE  IF NOT EXISTS "subject" (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE CHECK (name = UPPER(name))
+  contact VARCHAR(255) NOT NULL,
+  created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz DEFAULT CURRENT_TIMESTAMP 
 );
 
-CREATE TABLE  IF NOT EXISTS "grade" (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
+CREATE TABLE IF NOT EXISTS "subject" (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE CHECK (name = UPPER(name))
 );
 
-CREATE TABLE  IF NOT EXISTS "classroom" (
-    id SERIAL PRIMARY KEY,
-    capacity INT NOT NULL DEFAULT 10,
-    name VARCHAR(255) NOT NULL UNIQUE
+CREATE TABLE IF NOT EXISTS "grade" (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
 );
+
+CREATE TABLE IF NOT EXISTS "classroom" (
+  id SERIAL PRIMARY KEY,
+  capacity INT NOT NULL DEFAULT 10,
+  name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS "subject_tutor" (
+  id SERIAL PRIMARY KEY,
+  subjectid INTEGER REFERENCES subject(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+  tutorid INTEGER REFERENCES tutor(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+  gradeid INTEGER REFERENCES grade(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
+);
+
+-- Insert records into student table
+INSERT INTO "student" (username, email, password, firstname, lastname, contact, grade)
+VALUES
+  ('student1', 'student1@gmail.com', crypt('123', gen_salt('bf', 10)), 'John', 'Doe', '123456789', 'Grade 10'),
+  ('student2', 'student2@gmail.com', crypt('123', gen_salt('bf', 10)), 'Jane', 'Smith', '987654321', 'Grade 11'),
+  ('student3', 'student3@gmail.com', crypt('123', gen_salt('bf', 10)), 'Michael', 'Johnson', '555123456', 'Grade 9'),
+  ('student4', 'student4@gmail.com', crypt('123', gen_salt('bf', 10)), 'Emily', 'Brown', '777888999', 'Grade 12'),
+  ('student5', 'student5@gmail.com', crypt('123', gen_salt('bf', 10)), 'David', 'Lee', '111222333', 'Grade 11');
+
+
+-- Insert records into tutor table
+INSERT INTO "tutor" (username, email, password, title, firstname, lastname, contact)
+VALUES
+  ('tutor1', 'tutor1@gmail.com', crypt('123', gen_salt('bf', 10)), 'Professor', 'John', 'Smith', '555111222'),
+  ('tutor2', 'tutor2@gmail.com', crypt('123', gen_salt('bf', 10)), 'Instructor', 'Jane', 'Doe', '777888999'),
+  ('tutor3', 'tutor3@gmail.com', crypt('123', gen_salt('bf', 10)), 'Teacher', 'Michael', 'Johnson', '333444555'),
+  ('tutor4', 'tutor4@gmail.com', crypt('123', gen_salt('bf', 10)), 'Lecturer', 'Emily', 'Brown', '999888777'),
+  ('tutor5', 'tutor5@gmail.com', crypt('123', gen_salt('bf', 10)), 'Educator', 'David', 'Lee', '111222333');
+
+
+-- Insert records into staff table
+INSERT INTO "staff" (username, email, password, title, firstname, lastname, position, contact)
+VALUES
+  ('staff1', 'staff1@gmail.com', crypt('123', gen_salt('bf', 10)), 'Manager', 'John', 'Smith', 'HR Manager', '555111222'),
+  ('staff2', 'staff2@gmail.com', crypt('123', gen_salt('bf', 10)), 'Supervisor', 'Jane', 'Doe', 'IT Supervisor', '777888999'),
+  ('staff3', 'staff3@gmail.com', crypt('123', gen_salt('bf', 10)), 'Coordinator', 'Michael', 'Johnson', 'Admin Coordinator', '333444555'),
+  ('staff4', 'staff4@gmail.com', crypt('123', gen_salt('bf', 10)), 'Assistant', 'Emily', 'Brown', 'Executive Assistant', '999888777'),
+  ('staff5', 'staff5@gmail.com', crypt('123', gen_salt('bf', 10)), 'Director', 'David', 'Lee', 'Technical Director', '111222333');
+
+
+-- Insert records into subject table
+INSERT INTO "subject" (name)
+VALUES
+  ('MATHEMATICS'),
+  ('PHYSICS'),
+  ('CHEMISTRY'),
+  ('BIOLOGY'),
+  ('ENGLISH');
+
+
+-- Insert records into grade table
+INSERT INTO "grade" (name)
+VALUES
+  ('Grade 9'),
+  ('Grade 10'),
+  ('Grade 11'),
+  ('Grade 12'),
+  ('Grade 13');
+
+-- Insert records into classroom table
+INSERT INTO "classroom" (name, capacity)
+VALUES
+  ('Classroom A', 30),
+  ('Classroom B', 25),
+  ('Classroom C', 35),
+  ('Classroom D', 20),
+  ('Classroom E', 40);

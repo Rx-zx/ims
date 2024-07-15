@@ -39,15 +39,25 @@ exports.create = async (req, res) => {
   }
 };
 
-// Retrieve all Subjects
 exports.findAll = async (req, res) => {
   try {
-    const subjects = await Subject.findAll();
-    res.status(200).send(subjects);
-  } catch (err) {
-    res.status(500).send({
-      message: err.message || 'Some error occurred while retrieving subjects.'
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await Subject.findAndCountAll({
+      limit,
+      offset,
     });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({
+      data: rows,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -95,7 +105,7 @@ exports.update = async (req, res) => {
       });
     } else {
       res.status(500).send({
-        message: `Error updating Subject with id=${id}`
+        message: `Error updating Subject with id=${id} Error ${err}`
       });
     }
   }
@@ -115,7 +125,7 @@ exports.delete = async (req, res) => {
     res.status(200).send({ message: "Subject was deleted successfully!" });
   } catch (err) {
     res.status(500).send({
-      message: `Could not delete Subject with id=${id}`
+      message: `Could not delete Subject with id=${id} Error ${err}`
     });
   }
 };

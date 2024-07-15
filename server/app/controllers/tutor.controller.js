@@ -14,11 +14,9 @@ exports.create = async (req, res) => {
   const { username, password, email, firstname, lastname, title , contact } = req.body;
 
   try {
+      const existingTutor = await Tutor.findOne({ where: { firstname, lastname , email} });
 
-      const existingUser = await User.findOne({ where: { email } });
-      const existingTutor = await Tutor.findOne({ where: { firstname, lastname } });
-
-      if (existingUser || existingTutor) {
+      if (existingTutor) {
         throw new Error('Email or Tutor already exists');
       }
 
@@ -26,19 +24,14 @@ exports.create = async (req, res) => {
 
       const newTutorData = async () => {
 
-        const newUser = await User.create({
+        const newTutor = await Tutor.create({
+          firstname: firstname,
           username: username,
           email: email,
           password: hashedPassword,
-          user_type: "TUTOR",
-        });
-
-        const newTutor = await Tutor.create({
-          firstname: firstname,
           lastname: lastname,
           title: title,
           contact: contact,
-          userid: newUser.id
         });
 
         return newTutor
@@ -117,7 +110,7 @@ exports.update = (req, res) => {
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating tutor with id=" + id
+        message: "Error updating tutor with id=" + id + "Error" + err
       });
     });
 };
@@ -137,15 +130,7 @@ exports.delete = async (req, res) => {
       return res.status(404).send({ message: `Cannot find Student with id=${id}.` });
     }
 
-    const userid = tutor.userid;
-    const user = await User.findByPk(userid);
-    
-    if (!user) {
-      return res.status(404).send({ message: `Cannot find User with id=${userid}.` });
-    }
-
-    await Tutor.destroy({ where: { id } });
-    await User.destroy({ where: { id: userid } });
+    await tutor.destroy({ where: { id } });
 
     res.send({ message: "User was deleted successfully!", tutor });
 
@@ -171,35 +156,25 @@ exports.update = async (req, res) => {
       return res.status(404).send({ message: `Cannot find Tutor with id=${id}.` });
     }
 
-    const user = await User.findByPk(tutor.userid);
-    
-    if (!user) {
-      return res.status(404).send({ message: `Cannot find User with id=${tutor.userid}.` });
-    }
+    const existingTutor = await Tutor.findOne({ where: { firstname, lastname, email } });
 
-    const existingUser = await User.findOne({ where: { email } });
-    const existingTutor = await Tutor.findOne({ where: { firstname, lastname } });
-
-    if ((existingUser && existingUser.id !== user.id) || (existingTutor && existingTutor.id !== tutor.id)) {
+    if (existingTutor && existingTutor.id !== tutor.id) {
       throw new Error('Email or Tutor name already exists');
     }
 
-    const hashedPassword = password ? await bcrypt.hash(password, 10) : user.password;
-
-    await user.update({
-      username: username || user.username,
-      email: email || user.email,
-      password: hashedPassword,
-    });
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : tutor.password;
 
     await tutor.update({
+      username: username || tutor.username,
+      email: email || tutor.email,
+      password: hashedPassword,
       firstname: firstname || tutor.firstname,
       lastname: lastname || tutor.lastname,
       title: title || tutor.title,
       contact: contact || tutor.contact,
     });
 
-    res.status(200).send({ message: "Tutor was updated successfully!", tutor, user });
+    res.status(200).send({ message: "Tutor was updated successfully!", tutor });
   } catch (err) {
     res.status(500).send({
       message: err.message || 'Some error occurred while updating the Tutor.'

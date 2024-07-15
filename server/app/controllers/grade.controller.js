@@ -56,11 +56,11 @@ exports.findOne = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const Grade = await Grade.findByPk(id);
-    if (!Grade) {
+    const grade = await Grade.findByPk(id);
+    if (!grade) {
       return res.status(404).send({ message: `Cannot find Grade with id=${id}.` });
     }
-    res.status(200).send(Grade);
+    res.status(200).send(grade);
   } catch (err) {
     res.status(500).send({
       message: `Error retrieving Grade with id=${id}`
@@ -110,11 +110,11 @@ exports.delete = async (req, res) => {
       return res.status(404).send({ message: `Cannot find Grade with id=${id}.` });
     }
 
-    await Grade.destroy();
+    await grade.destroy();
     res.status(200).send({ message: "Grade was deleted successfully!" });
   } catch (err) {
     res.status(500).send({
-      message: `Could not delete Grade with id=${id}`
+      message: `Could not delete Grade with id=${id} err ${err}`
     });
   }
 };

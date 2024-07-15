@@ -10,8 +10,8 @@ this will fix the above
 if any issue with This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@3
 rename the package.json file and run again compose up build command and revert the file name back again
 
-run npm install
-run npm run dev
+npm install
+npm run dev
 to start the project run node app.js inside the project root folder
 if any issues releated with port not available delete all images in docker and try re-building them using "docker-compose up --build -d"
 

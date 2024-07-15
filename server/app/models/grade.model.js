@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize, Sequelize) => {
-    const Subject = sequelize.define("grade", {
+    const Grade = sequelize.define("grade", {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -12,6 +12,6 @@ module.exports = (sequelize, Sequelize) => {
       timestamps: false,
     });
   
-    return Subject;
+    return Grade;
   };
   

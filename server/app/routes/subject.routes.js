@@ -1,18 +1,15 @@
 module.exports = (app) => {
-  
-    var router = require("express").Router();
-  
-    const subject = require("../controllers/subject.controller");
+  const subject = require("../controllers/subject.controller.js");
 
-    router.post("/", subject.create);
-    
-    router.get("/", subject.findAll);
-    
-    router.get("/:id", subject.findOne);
-    
-    router.put("/:id",  subject.update);
-    
-    router.delete("/:id", subject.delete);
-  
-    app.use('/api/subject', router);
-  };
+  var router = require("express").Router();
+
+  router.get("/all", subject.findAll);
+
+  router.get("/:id", subject.findOne);
+
+  router.delete("/:id", subject.delete);
+
+  router.post("/", subject.create);
+
+  app.use('/api/subject', router);
+};

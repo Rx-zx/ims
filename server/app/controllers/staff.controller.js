@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const { log } = require("console");
 const { check, validationResult } = require('express-validator');
 
-// Validation rules
+
 exports.validate = (method) => {
   switch (method) {
     case 'createStaff': {
@@ -57,10 +57,9 @@ exports.create = async (req, res) => {
 
   try {
 
-      const existingUser = await User.findOne({ where: { email } });
       const existingStaff = await Staff.findOne({ where: { firstname, lastname } });
 
-      if (existingUser || existingStaff) {
+      if (existingStaff) {
         throw new Error('Email or Staff already exists');
       }
 
@@ -69,29 +68,20 @@ exports.create = async (req, res) => {
 
       const newStaffData = async () => {
 
-        const newUser = await User.create({
+        const newStaff = await Staff.create({
           username: username,
           email: email,
           password: hashedPassword,
-          user_type: "STAFF",
-        });
-
-        const newStaff = await Staff.create({
           firstname: firstname,
           lastname: lastname,
           position: position,
           title: title,
           contact: contact,
-          userid: newUser.id
         });
 
         return newStaff
-
       }
-
       const result = await newStaffData();
-
-
     res.status(201).send(result);
   } catch (err) {
     res.status(500).send({
@@ -136,15 +126,7 @@ exports.delete = async (req, res) => {
       return res.status(404).send({ message: `Cannot find Staff with id=${id}.` });
     }
 
-    const userid = staff.userid;
-    const user = await User.findByPk(userid);
-    
-    if (!user) {
-      return res.status(404).send({ message: `Cannot find User with id=${userid}.` });
-    }
-
     await Staff.destroy({ where: { id } });
-    await User.destroy({ where: { id: userid } });
 
     res.send({ message: "User was deleted successfully!", staff });
 
@@ -171,28 +153,18 @@ exports.update = async (req, res) => {
       return res.status(404).send({ message: `Cannot find Staff with id=${id}.` });
     }
 
-    const user = await User.findByPk(tutor.userid);
-    
-    if (!user) {
-      return res.status(404).send({ message: `Cannot find User with id=${tutor.userid}.` });
-    }
+    const existingStaff = await Staff.findOne({ where: { firstname, lastname , email} });
 
-    const existingUser = await User.findOne({ where: { email } });
-    const existingStaff = await Staff.findOne({ where: { firstname, lastname } });
-
-    if ((existingUser && existingUser.id !== user.id) || (existingStaff && existingStaff.id !== staff.id)) {
+    if ((existingStaff && existingStaff.id !== staff.id)) {
       throw new Error('Email or Tutor name already exists');
     }
 
-    const hashedPassword = password ? await bcrypt.hash(password, 10) : user.password;
-
-    await user.update({
-      username: username || user.username,
-      email: email || user.email,
-      password: hashedPassword,
-    });
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : staff.password;
 
     await staff.update({
+      username: username || staff.username,
+      email: email || staff.email,
+      password: hashedPassword,
       firstname: firstname || staff.firstname,
       lastname: lastname || staff.lastname,
       title: title || staff.title,
@@ -200,7 +172,7 @@ exports.update = async (req, res) => {
       position: position || staff.position,
     });
 
-    res.status(200).send({ message: "Staff was updated successfully!", staff, user });
+    res.status(200).send({ message: "Staff was updated successfully!", staff });
   } catch (err) {
     res.status(500).send({
       message: err.message || 'Some error occurred while updating the Staff.'

@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Student } = require('../models');
 const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 
@@ -36,7 +36,7 @@ exports.findAll = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
 
-    const { count, rows } = await User.findAndCountAll({
+    const { count, rows } = await Student.findAndCountAll({
       limit,
       offset,
     });

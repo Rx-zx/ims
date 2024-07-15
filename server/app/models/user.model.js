@@ -23,6 +23,14 @@ const User = (sequelize) => {
       allowNull: false, 
       defaultValue: 'NA', 
     },
+    user_type_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'staff', 
+        key: 'id',
+      },
+      allowNull: false,
+    },
   }, {
     tableName: 'user',
     underscored: true,
