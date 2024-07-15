@@ -5,8 +5,8 @@ export const SectionHeader = ({ section, is_create }) => {
       <div className='bar'>
         <p>
           {section}
-          {is_create && <button className="create-button">Create</button>}
         </p>
+        {is_create && <button className="create-button">Create</button>}
       </div>
     );
   };

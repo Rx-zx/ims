@@ -1,26 +1,25 @@
 .bar{
-    position: fixed;
+    position: absolute;
     background-color: var(--secondary-background);
-    height: 65px;
-    margin-top: 6.4%;
+    height: 67px;
     margin-left: 16.65%;
     font-size: 36px;
-    width: 90%;
-
+    width: 85%;
+    display: flex;
 }
 
 p{
     padding-top: -2%;
     margin-top: 10px;
     padding-left: 2%;
+    width: 30%;
 }
 
 .create-button {
-    margin-left: 60%;
-    margin-top: 5px;
+    margin-left: 50%;
+    margin-top: 10px;
     height: 40px;
     width: 140px;
-    position: fixed;
     background-color: #3498db;
     color: #ffffff;
     font-weight: 600;

@@ -25,10 +25,19 @@ const Grade = require('./grade.model')(sequelize, Sequelize.DataTypes);
 const Subject = require('./subject.model')(sequelize, Sequelize.DataTypes);
 const Classroom = require('./classroom.model')(sequelize, Sequelize.DataTypes);
 const SubjectTutor = require('./subject_tutor.model')(sequelize, Sequelize.DataTypes);
+const StudentSubject = require('./student_subject.model')(sequelize, Sequelize.DataTypes);
+const Timetable = require('./timetable.model')(sequelize, Sequelize.DataTypes);
 
 SubjectTutor.belongsTo(Tutor, { foreignKey: 'tutorid', as: 'tutor' });
 SubjectTutor.belongsTo(Subject, { foreignKey: 'subjectid', as: 'subject' });
 SubjectTutor.belongsTo(Grade, { foreignKey: 'gradeid', as: 'grade' });
+
+StudentSubject.belongsTo(SubjectTutor, { foreignKey: 'subjecttutorid', as: 'subjectTutor' });
+StudentSubject.belongsTo(Student, { foreignKey: 'studentid', as: 'student' });
+
+Timetable.belongsTo(Classroom, { foreignKey: 'classroomid', as: 'classroom' });
+
+
 
 module.exports = {
   sequelize,
@@ -39,6 +48,8 @@ module.exports = {
   Grade,
   Subject,
   Classroom,
-  SubjectTutor
+  SubjectTutor,
+  StudentSubject,
+  Timetable
 
 };

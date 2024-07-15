@@ -42,7 +42,12 @@ const Staff = (sequelize) => {
     position: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    salary: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     }
+
   }, {
     tableName: 'staff',
     timestamps: false,

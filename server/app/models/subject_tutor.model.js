@@ -3,9 +3,10 @@ const { DataTypes, Sequelize } = require('sequelize');
 const SubjectTutor = (sequelize) => {
   return  sequelize.define('SubjectTutor', {
     id: {
+      primaryKey: true,
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true,
+      
     },
     tutorid: {
       type: DataTypes.INTEGER,
@@ -31,6 +32,10 @@ const SubjectTutor = (sequelize) => {
         },
         allowNull: false,
     },
+    fees: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+  },
   }, {
     tableName: 'subject_tutor', 
     timestamps: false,

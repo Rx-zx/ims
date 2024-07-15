@@ -1,5 +1,5 @@
 .fixed-header {
-    position: fixed;
+    position: relative;
     width: 100%;
     height: 13%;
     background-color: #CCAA71;
