@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../Header/Header';
-import './Tutor.css';
+import './Classroom.css';
 import { Navbar } from '../Navbar/Navbar';
 import { SectionHeader } from '../SectionHeader/SectionHeader';
 
-export const Tutor = () => {
+export const Classroom = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Number of items per page
+  const [itemsPerPage] = useState(10); 
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +28,7 @@ export const Tutor = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await api.get(`/api/tutor/all?page=${currentPage}&limit=${itemsPerPage}`);
+        const response = await api.get(`/api/classroom/all?page=${currentPage}&limit=${itemsPerPage}`);
         if (response.status === 200) {
           const { data, totalPages } = response.data; 
           setData(data);
@@ -72,10 +72,8 @@ export const Tutor = () => {
       <thead>
         <tr>
           <th>ID</th>
-          <th>Title</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Contact</th>
+          <th>Name</th>
+          <th>Capacity</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -83,38 +81,35 @@ export const Tutor = () => {
         {data.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
-            <td>{item.title}</td>
-            <td>{item.firstname}</td>
-            <td>{item.lastname}</td>
-            <td>{item.contact}</td>
+            <td>{item.name}</td>
+            <td>{item.capacity}</td>
             <td>
               <button className="editBtn" onClick={() => handleEdit(item.id)}>Edit</button>
               <button className="deleteBtn" onClick={() => handleDelete(item.id)}>Delete</button>
             </td>
           </tr>
         ))}
-      </tbody>
-      <tfoot>
-      <td colSpan="4" class="tfoot-left"></td>
-      <div className="pagination">
+        <tr>
+          <td colSpan="7" className='pagination'>
           <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             Previous
-          </button>
+          </button >
           {[...Array(totalPages).keys()].map((pageNumber) => (
             <button
               key={pageNumber + 1}
               onClick={() => handlePageChange(pageNumber + 1)}
               className={currentPage === pageNumber + 1 ? 'active' : ''}
+              
             >
               {pageNumber + 1}
             </button>
           ))}
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+          <button  onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
             Next
           </button>
-        </div>
-      </tfoot>
-      
+          </td>
+        </tr>
+      </tbody>
     </table>
     
   );
@@ -123,7 +118,7 @@ export const Tutor = () => {
     <div>
       <Header type={'dashboard'} action={"Logout"} />
       <Navbar />
-      <SectionHeader section={'Tutor'} is_create={true} />
+      <SectionHeader section={'Classroom'} is_create={true} />
       <div className='main'>
         {loading && <p>Loading...</p>}
         {error && <p className="error">{error}</p>}

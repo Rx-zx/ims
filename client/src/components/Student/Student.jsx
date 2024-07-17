@@ -72,7 +72,6 @@ export const Student = () => {
       <thead>
         <tr>
           <th>ID</th>
-          <th>User ID</th>
           <th>First Name</th>
           <th>Last Name</th>
           <th>Grade</th>
@@ -84,7 +83,6 @@ export const Student = () => {
         {data.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
-            <td>{item.userid}</td>
             <td>{item.firstname}</td>
             <td>{item.lastname}</td>
             <td>{item.grade}</td>
@@ -95,7 +93,7 @@ export const Student = () => {
             </td>
           </tr>
         ))}
-        <tr  >
+        <tr>
           <td colSpan="7" className='pagination'>
           <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             Previous
@@ -116,27 +114,6 @@ export const Student = () => {
           </td>
         </tr>
       </tbody>
-      {/* <tfoot>
-      <td colSpan="4" class="tfoot-left">Total Students:</td>
-      <div className="pagination">
-          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-            Previous
-          </button>
-          {[...Array(totalPages).keys()].map((pageNumber) => (
-            <button
-              key={pageNumber + 1}
-              onClick={() => handlePageChange(pageNumber + 1)}
-              className={currentPage === pageNumber + 1 ? 'active' : ''}
-            >
-              {pageNumber + 1}
-            </button>
-          ))}
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-            Next
-          </button>
-        </div>
-      </tfoot> */}
-      
     </table>
     
   );

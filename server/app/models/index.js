@@ -36,7 +36,13 @@ StudentSubject.belongsTo(SubjectTutor, { foreignKey: 'subjecttutorid', as: 'subj
 StudentSubject.belongsTo(Student, { foreignKey: 'studentid', as: 'student' });
 
 Timetable.belongsTo(Classroom, { foreignKey: 'classroomid', as: 'classroom' });
-
+Timetable.belongsTo(SubjectTutor, { foreignKey: 'monday', as: 'mondaycls' });
+Timetable.belongsTo(SubjectTutor, { foreignKey: 'tuesday', as: 'tuesdaycls' });
+Timetable.belongsTo(SubjectTutor, { foreignKey: 'wednesday', as: 'wednesdaycls' });
+Timetable.belongsTo(SubjectTutor, { foreignKey: 'thursday', as: 'thursdaycls' });
+Timetable.belongsTo(SubjectTutor, { foreignKey: 'friday', as: 'fridaycls' });
+Timetable.belongsTo(SubjectTutor, { foreignKey: 'saturday', as: 'saturdaycls' });
+Timetable.belongsTo(SubjectTutor, { foreignKey: 'sunday', as: 'sundaycls' });
 
 
 module.exports = {

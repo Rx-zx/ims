@@ -12,6 +12,7 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   nodeapp:
+    image: node:latest
     build:
       context: .
     ports:
@@ -20,3 +21,4 @@ services:
       - /Users/harresh/Desktop/ims/server:/usr/src/app
     depends_on:
       - postgres
+    command: "npm run dev"

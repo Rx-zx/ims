@@ -72,7 +72,7 @@ export const LoginSignup = () => {
           <input type="password" placeholder='Password' onChange={(e) => setPassword(e.target.value)} required onKeyDown={handleKeyDown}/>
         </div>
         <div className="input">
-        <select onChange={(e) => handleRoleChange(e.target.value)} required>
+        <select  onChange={(e) => handleRoleChange(e.target.value)} required>
         <option value="">Select Role</option>
         <option value="ADMIN">ADMIN</option>
         <option value="STUDENT">STUDENT</option>

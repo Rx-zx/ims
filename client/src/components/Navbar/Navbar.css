@@ -1,6 +1,6 @@
 .vertical-navbar {
     width: 15%;
-    height: 80%;
+    height: 100%;
     background-color: #333; 
     padding: 15px;
     position:absolute;
@@ -33,3 +33,20 @@
     background-color: #555;
   }
   
+  .nested-nav li{
+    list-style-type: none;
+    padding: 0 15px; 
+  }
+  
+  .nested-nav li a {
+    color: #ddd; 
+    text-decoration: none;
+  }
+  
+  .nested-nav li a:hover {
+    color: white; 
+  }
+
+  .reports-arrow {
+    padding-left: 10px;
+  }
