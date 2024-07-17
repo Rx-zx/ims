@@ -1,13 +1,14 @@
 const { SubjectTutor, Tutor, Subject, Grade } = require('../models');
 
 exports.create = async (req, res) => {
-  const { tutorid, subjectid, gradeid } = req.body;
+  const { tutorid, subjectid, gradeid , fees } = req.body;
 
   try {
     const newSubjectTutor = await SubjectTutor.create({
       tutorid,
       subjectid,
       gradeid,
+      fees
     });
 
     res.status(201).send(newSubjectTutor);
@@ -87,6 +88,7 @@ exports.update = async (req, res) => {
       tutorid: tutorid || subjectTutor.tutorid,
       subjectid: subjectid || subjectTutor.subjectid,
       gradeid: gradeid || subjectTutor.gradeid,
+      fees: fees || subjectTutor.fees,
     });
 
     res.status(200).send({ message: "SubjectTutor was updated successfully!", subjectTutor });

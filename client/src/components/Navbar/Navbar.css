@@ -1,16 +1,17 @@
 .vertical-navbar {
     width: 15%;
+    height: 80%;
     background-color: #333; 
     padding: 15px;
-    height: 87%;
-    margin-top: 6.45%;
-    position:fixed;
+    position:absolute;
+    display: flex;
   }
   
   .vertical-navbar ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    width: 80%;
   }
   
   .vertical-navbar li {

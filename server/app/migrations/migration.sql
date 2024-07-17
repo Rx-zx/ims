@@ -1,3 +1,14 @@
+
+
+-- Drop existing schema if it exists
+DROP SCHEMA IF EXISTS public CASCADE;
+
+-- Create new schema
+CREATE SCHEMA public;
+
+-- Enable pgcrypto extension if not already enabled
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- Create user_type ENUM if not exists
 DO $$ 
 BEGIN
@@ -7,6 +18,7 @@ BEGIN
 END $$;
 
 -- Drop existing tables
+DROP TABLE IF EXISTS "student_subject";
 DROP TABLE IF EXISTS "subject_tutor";
 DROP TABLE IF EXISTS "staff";
 DROP TABLE IF EXISTS "tutor";
@@ -14,6 +26,7 @@ DROP TABLE IF EXISTS "student";
 DROP TABLE IF EXISTS "grade";
 DROP TABLE IF EXISTS "subject";
 DROP TABLE IF EXISTS "classroom";
+DROP TABLE IF EXISTS "timetable";
 
 -- Create users table
 CREATE TABLE IF NOT EXISTS "student" (
@@ -52,6 +65,7 @@ CREATE TABLE IF NOT EXISTS "staff" (
   lastname VARCHAR(255) NOT NULL,
   position VARCHAR(255) NOT NULL,
   contact VARCHAR(255) NOT NULL,
+  salary INT NOT NULL DEFAULT 10,
   created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz DEFAULT CURRENT_TIMESTAMP 
 );
@@ -76,8 +90,33 @@ CREATE TABLE IF NOT EXISTS "subject_tutor" (
   id SERIAL PRIMARY KEY,
   subjectid INTEGER REFERENCES subject(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
   tutorid INTEGER REFERENCES tutor(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-  gradeid INTEGER REFERENCES grade(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
+  gradeid INTEGER REFERENCES grade(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+  fees INT NOT NULL DEFAULT 10
 );
+
+CREATE TABLE IF NOT EXISTS "student_subject" (
+    id SERIAL PRIMARY KEY,
+    studentid INTEGER NOT NULL,
+    subjecttutorid INTEGER NOT NULL,
+    FOREIGN KEY (studentid) REFERENCES student(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (subjecttutorid) REFERENCES subject_tutor(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS timetable (
+    id SERIAL PRIMARY KEY,
+    timeslot VARCHAR(255) NOT NULL,
+    classroomid INTEGER NOT NULL,
+    monday INT,
+    tuesday INT,
+    wednesday INT,
+    thursday INT,
+    friday INT,
+    saturday INT,
+    sunday INT,
+    FOREIGN KEY (classroomid) REFERENCES classroom(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 
 -- Insert records into student table
 INSERT INTO "student" (username, email, password, firstname, lastname, contact, grade)
@@ -100,13 +139,13 @@ VALUES
 
 
 -- Insert records into staff table
-INSERT INTO "staff" (username, email, password, title, firstname, lastname, position, contact)
+INSERT INTO "staff" (username, email, password, title, firstname, lastname, position, contact, salary)
 VALUES
-  ('staff1', 'staff1@gmail.com', crypt('123', gen_salt('bf', 10)), 'Manager', 'John', 'Smith', 'HR Manager', '555111222'),
-  ('staff2', 'staff2@gmail.com', crypt('123', gen_salt('bf', 10)), 'Supervisor', 'Jane', 'Doe', 'IT Supervisor', '777888999'),
-  ('staff3', 'staff3@gmail.com', crypt('123', gen_salt('bf', 10)), 'Coordinator', 'Michael', 'Johnson', 'Admin Coordinator', '333444555'),
-  ('staff4', 'staff4@gmail.com', crypt('123', gen_salt('bf', 10)), 'Assistant', 'Emily', 'Brown', 'Executive Assistant', '999888777'),
-  ('staff5', 'staff5@gmail.com', crypt('123', gen_salt('bf', 10)), 'Director', 'David', 'Lee', 'Technical Director', '111222333');
+  ('staff1', 'staff1@gmail.com', crypt('123', gen_salt('bf', 10)), 'Manager', 'John', 'Smith', 'HR Manager', '555111222',122222),
+  ('staff2', 'staff2@gmail.com', crypt('123', gen_salt('bf', 10)), 'Supervisor', 'Jane', 'Doe', 'IT Supervisor', '777888999',123232),
+  ('staff3', 'staff3@gmail.com', crypt('123', gen_salt('bf', 10)), 'Coordinator', 'Michael', 'Johnson', 'Admin Coordinator', '333444555',234234),
+  ('staff4', 'staff4@gmail.com', crypt('123', gen_salt('bf', 10)), 'Assistant', 'Emily', 'Brown', 'Executive Assistant', '999888777',234234),
+  ('staff5', 'staff5@gmail.com', crypt('123', gen_salt('bf', 10)), 'Director', 'David', 'Lee', 'Technical Director', '111222333',2342344);
 
 
 -- Insert records into subject table
@@ -136,3 +175,29 @@ VALUES
   ('Classroom C', 35),
   ('Classroom D', 20),
   ('Classroom E', 40);
+
+-- Insert records into subject tutor table
+INSERT INTO "subject_tutor" ( tutorid, subjectid, gradeid, fees)
+VALUES
+  (1,1,1, 3000),
+  (1,1,1, 4000),
+  (2,2,1, 5000),
+  (3,1,5, 2500);
+
+INSERT INTO "student_subject" ( studentid, subjecttutorid)
+VALUES
+  (1,2),
+  (2,4),
+  (1,2),
+  (2,3),
+  (1,4),
+  (3,4);
+
+INSERT INTO "timetable" (timeslot, classroomid) VALUES 
+('7.00-9.00',1),
+('9.00-11.00',1),
+('11.00-13.00',1),
+('13.00-15.00',1),
+('15.00-17.00',1),
+('17.00-19.00',1),
+('19.00-21.00',1);
