@@ -72,7 +72,6 @@ export const Staff = () => {
       <thead>
         <tr>
           <th>ID</th>
-          <th>User ID</th>
           <th>Title</th>
           <th>First Name</th>
           <th>Last Name</th>
@@ -85,40 +84,38 @@ export const Staff = () => {
         {data.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
-            <td>{item.userid}</td>
             <td>{item.title}</td>
             <td>{item.firstname}</td>
             <td>{item.lastname}</td>
-            <td>{item.position}</td>
             <td>{item.contact}</td>
+            <td>{item.position}</td>
             <td>
               <button className="editBtn" onClick={() => handleEdit(item.id)}>Edit</button>
               <button className="deleteBtn" onClick={() => handleDelete(item.id)}>Delete</button>
             </td>
           </tr>
         ))}
-      </tbody>
-      <tfoot>
-      <td colSpan="4" class="tfoot-left"></td>
-      <div className="pagination">
+        <tr>
+          <td colSpan="7" className='pagination'>
           <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             Previous
-          </button>
+          </button >
           {[...Array(totalPages).keys()].map((pageNumber) => (
             <button
               key={pageNumber + 1}
               onClick={() => handlePageChange(pageNumber + 1)}
               className={currentPage === pageNumber + 1 ? 'active' : ''}
+              
             >
               {pageNumber + 1}
             </button>
           ))}
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+          <button  onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
             Next
           </button>
-        </div>
-      </tfoot>
-      
+          </td>
+        </tr>
+      </tbody>
     </table>
     
   );

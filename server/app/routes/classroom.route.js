@@ -6,7 +6,7 @@ module.exports = (app) => {
 
     router.post("/", classroom.create);
     
-    router.get("/", classroom.findAll);
+    router.get("/all", classroom.findAll);
     
     router.get("/:id", classroom.findOne);
     

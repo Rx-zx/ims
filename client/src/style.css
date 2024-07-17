@@ -15,10 +15,10 @@
 }
 
 .main {
-position: relative;
+position: absolute;
 background-color: var(--login-background);
-width: 87%;
-margin-top: 5.5%;
+width: 85%;
+margin-top: 2%;
 margin-left: 16.15%;
 }
 

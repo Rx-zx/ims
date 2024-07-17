@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS "student_subject" (
 CREATE TABLE IF NOT EXISTS timetable (
     id SERIAL PRIMARY KEY,
     timeslot VARCHAR(255) NOT NULL,
+    timeslotid VARCHAR(255) NOT NULL,
     classroomid INTEGER NOT NULL,
     monday INT,
     tuesday INT,
@@ -193,11 +194,11 @@ VALUES
   (1,4),
   (3,4);
 
-INSERT INTO "timetable" (timeslot, classroomid) VALUES 
-('7.00-9.00',1),
-('9.00-11.00',1),
-('11.00-13.00',1),
-('13.00-15.00',1),
-('15.00-17.00',1),
-('17.00-19.00',1),
-('19.00-21.00',1);
+INSERT INTO "timetable" (timeslot, timeslotid,classroomid, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES 
+('7.00-9.00',1,1,2,3,4,3,4,1,2),
+('9.00-11.00',2,1,2,3,4,3,4,1,2),
+('11.00-13.00',3,1,2,3,4,3,4,1,2),
+('13.00-15.00',4,1,2,3,4,3,4,1,2),
+('15.00-17.00',5,1,2,3,4,3,4,1,2),
+('17.00-19.00',6,1,2,3,4,3,4,1,2),
+('19.00-21.00',7,1,2,3,4,3,4,1,2);

@@ -42,12 +42,23 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const classrooms = await Classroom.findAll();
-    res.status(200).send(classrooms);
-  } catch (err) {
-    res.status(500).send({
-      message: err.message || 'Some error occurred while retrieving Classrooms.'
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await Classroom.findAndCountAll({
+      limit,
+      offset,
     });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({
+      data: rows,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
