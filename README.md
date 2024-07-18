@@ -1,3 +1,10 @@
+#Instruction before set-up
+- Download Docker Desktop using the link here, (https://www.docker.com/products/docker-desktop/)
+- Download React app/node.js using the link here, https://www.docker.com/products/docker-desktop/
+- Download DBeaver using the link here, https://dbeaver.io/download/
+
+-Once You have download the necessary applications, download Docker desktop extension in Visual Studio Code
+
 # ims 
 
 ## server 
